@@ -1,3 +1,4 @@
+"""CLI to support the Newton-raphson method for single and multivariable real functions"""
 import click
 from methods import newton_raphson, newton_raphson_multi
 
@@ -45,14 +46,9 @@ def iterate_newton(
 ) -> list[float]:
     """Apply the Newton-Raphson method iteratively until desired accuracy is obtained."""
     if len(functions) == 1:
-        return newton_raphson(functions, initial_guesses, tolerance, max_iterations)
-        #python newton_raphson.py iterate-newton --functions x**3-4*x**2+1 --initial-guesses 0.5 --max-iterations 3
+        print(newton_raphson(functions, initial_guesses, tolerance, max_iterations))
     elif len(functions) > 1:
-        #python newton_raphson.py iterate-newton --functions x+y**2 --functions x-y**2 --symbols x --symbols y --initial-guesses 1 --initial-guesses 1 --max-iterations 3
-        # CURRENT ESTIMATE:  Matrix([[0], [1/2]])
-        # CURRENT ESTIMATE:  Matrix([[0], [1/4]])
-        # CURRENT ESTIMATE:  Matrix([[0], [1/8]])
-        return newton_raphson_multi(functions, initial_guesses, symbols, tolerance, max_iterations)
+        print(newton_raphson_multi(functions, initial_guesses, symbols, tolerance, max_iterations))
 
 if __name__ == "__main__":
     main()
