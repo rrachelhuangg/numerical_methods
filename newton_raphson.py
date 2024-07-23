@@ -1,13 +1,21 @@
 import click
-from methods import newton_raphson
+from methods import newton_raphson, newton_raphson_multi
 
 @click.group
 def main():
     """Approximate the roots of a function using the Newton-Raphson method"""
 
 @main.command()
-@click.argument('function', type=str)
-@click.argument('initial-guess', type=float)
+@click.option(
+    '--functions',
+    multiple=True,
+    help='temp text'
+)
+@click.option(
+    '--initial-guesses',
+    multiple=True,
+    help='temp text'
+)
 @click.option(
     '--tolerance',
     default=None,
@@ -21,32 +29,30 @@ def main():
     type=int,
     help='The number of Newton-Raphson method iterations desired to approximate function roots.'
 )
+@click.option(
+    '--symbols',
+    default = None,
+    multiple=True,
+    help='temp text'
+)
 
 def iterate_newton(
-    function: str,
-    initial_guess: float,
+    functions,
+    initial_guesses,
+    symbols,
     tolerance: float | None = None,
     max_iterations: int | None = None
-):
+) -> list[float]:
     """Apply the Newton-Raphson method iteratively until desired accuracy is obtained."""
-    estimate, iter_estimate, x = initial_guess, initial_guess, "x"
-    if not max_iterations:
-        if tolerance:
-            while abs(iter_estimate-estimate) >= tolerance:
-                iter_estimate = estimate - newton_raphson(estimate, function, x)
-                estimate = iter_estimate
-        elif not tolerance:
-            max_iterations = 10
-            for i in range(max_iterations):
-                iter_estimate = estimate - newton_raphson(estimate, function, x)
-                estimate = iter_estimate
-    if max_iterations:
-        for i in range(max_iterations):
-            iter_estimate = estimate - newton_raphson(estimate, function, x)
-            estimate = iter_estimate
-            if tolerance is not None and abs(iter_estimate-estimate) < tolerance:
-                break
-    return iter_estimate
+    if len(functions) == 1:
+        return newton_raphson(functions, initial_guesses, tolerance, max_iterations)
+        #python newton_raphson.py iterate-newton --functions x**3-4*x**2+1 --initial-guesses 0.5 --max-iterations 3
+    elif len(functions) > 1:
+        #python newton_raphson.py iterate-newton --functions x+y**2 --functions x-y**2 --symbols x --symbols y --initial-guesses 1 --initial-guesses 1 --max-iterations 3
+        # CURRENT ESTIMATE:  Matrix([[0], [1/2]])
+        # CURRENT ESTIMATE:  Matrix([[0], [1/4]])
+        # CURRENT ESTIMATE:  Matrix([[0], [1/8]])
+        return newton_raphson_multi(functions, initial_guesses, symbols, tolerance, max_iterations)
 
 if __name__ == "__main__":
     main()
