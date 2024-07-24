@@ -43,10 +43,10 @@ def iterate_newton(
     symbols,
     tolerance: float | None = None,
     max_iterations: int | None = None
-) -> list[float]:
+):
     """Apply the Newton-Raphson method iteratively until desired accuracy is obtained."""
     if len(functions) == 1:
-        print(newton_raphson(functions, initial_guesses, tolerance, max_iterations))
+        print(newton_raphson(functions, initial_guesses, tolerance, max_iterations, symbols))
     elif len(functions) > 1:
         print(newton_raphson_multi(functions, initial_guesses, symbols, tolerance, max_iterations))
 
