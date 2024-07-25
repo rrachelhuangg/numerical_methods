@@ -1,23 +1,34 @@
 """Test functions for the Newton-Raphson method"""
-#check these answers by hand first!
-#errors to catch neatly: 1) determinant = 0, can't invert
-#singlevariable newton
-#python newton_raphson.py iterate-newton --functions x**3-4*x**2+1 --initial-guesses 0.5 --max-iterations 3
-#single variable newton multiple roots
-#python newton_raphson.py iterate-newton --functions x**3-x --initial-guesses 0.5 --initial-guesses -0.5 --initial-guesses 0.1 --max-iterations 5
-#[-1.00000000000000, 1.00000000000000, 0]
-#python newton_raphson.py iterate-newton --functions x**4-5*x**2+4 --initial-guesses -1.5 --initial-guesses 1.5 --initial-guesses 0.5 --initial-guesses -0.5 --max-iterations 11
-#[-2.000189, 2.000189, 1.0, -1.0]
-#multivariable newton
-#python newton_raphson.py iterate-newton --functions x+y**2 --functions x-y**2 --symbols x --symbols y --initial-guesses 1 --initial-guesses 1 --max-iterations 3
-# CURRENT ESTIMATE:  Matrix([[0], [1/8]])
-#python newton_raphson.py iterate-newton --functions cos(x)-y --functions sin(y)+x-1 --initial-guesses 0 --initial-guesses 1 --symbols x --symbols y --max-iterations 3
-#[('0.166039', '0.986247')]
-#python newton_raphson.py iterate-newton --functions x+y+z --functions 2*x+y-z --functions x+y+z**2 --initial-guesses 1 --initial-guesses 1 --initial-guesses 1 --max-iterations 3 --symbols x --symbols y --symbols z
-#iter_estimate:  [2, -3, 1]
-#multivariable newton multiple roots
-#python newton_raphson.py iterate-newton --functions cos(x)-y --functions sin(y)+x-1 --initial-guesses 0 --initial-guesses 1 --symbols x --symbols y --max-iterations 3 --initial-guesses 1 --initial-guesses 1
-#(the above took a really long time, but did finish eventually)
-#[('0.166039', '0.986247'), ('0.162625', '0.992249')]
-#python newton_raphson.py iterate-newton --functions x**2+y-z-3 --functions x-y**2+z-1 --functions x+y+z**2-3 --initial-guesses 1 --initial-guesses 1 --initial-guesses 1 --initial-guesses 2 --initial-guesses 2 --initial-guesses 2 --symbols x --symbols y --symbols z --max-iterations 3
-#[('1.582129', '1.079010', '0.582132'), ('1.581883', '1.080814', '0.583169')]
+import pytest
+from methods import newton_raphson, newton_raphson_multi
+
+@pytest.mark.parametrize(
+    "functions, initial_guesses, tolerance, max_iterations, symbols, expected_approximations",
+    [
+        (["x**3-4*x**2+1"], [0.5], None, 3, ('x',), [0.537402]),
+        (["x**3-x"], [0.5, -0.5, 0.1], None, 5, ('x',), [-1.00000000000000, 1.00000000000000, 0]),
+        (["x**4-5*x**2+4"], [-1.5, 1.5, 0.5, -0.5], None, 11, ('x',), [-2.000189, 2.000189, 1.0, -1.0]),
+        (["x**4-5*x**2+4"], [-1.5, 1.5, 0.5, -0.5], 0.1, None, ('x',), [-2.011062, 2.011062, 0.999995, -0.999995]),
+        (["x**4-5*x**2+4"], [-1.5, 1.5, 0.5, -0.5], 0.1, 3, ('x',), [-7.286189, 7.286189, 0.999995, -0.999995])
+    ]
+)
+def test_single_var_newton(functions: list[str], initial_guesses: list[float], tolerance: float, max_iterations: int, symbols, expected_approximations):
+    """Test the Newton_Raphson method on single variable real functions with a single initial guess"""
+    assert newton_raphson(functions, initial_guesses, tolerance, max_iterations, symbols) == expected_approximations
+
+@pytest.mark.parametrize(
+    "functions, initial_guesses, tolerance, max_iterations, symbols, expected_approximations",
+    [
+        (["x+y**2","x-y**2"], [1, 1], None, 3, ('x','y',), [('0.000000', '0.125000')]),
+        (["cos(x)-y","sin(y)+x-1"], [0, 1], None, 3, ('x','y',), [('0.166039', '0.986247')]),
+        (["x+y+z","2*x+y-z", "x+y+z**2"], [1, 1, 1], None, 3, ('x','y','z',), [('2.000000', '-3.000000', '1.000000')]),
+        (["x**2+y-z-3","x-y**2+z-1", "x+y+z**2-3"], [1, 1, 1, 2, 2, 2], None, 3, ('x','y','z',), [('1.582129', '1.079010', '0.582132'), ('1.581883', '1.080814', '0.583169')]),
+        (["x**2+y-z-3","x-y**2+z-1", "x+y+z**2-3"], [1, 1, 1, 2, 2, 2], 0.01, None, ('x','y','z',), [('1.582129', '1.079010', '0.582132'), ('1.582125', '1.079006', '0.582126')]),
+        (["x**2+y-z-3","x-y**2+z-1", "x+y+z**2-3"], [1, 1, 1, 2, 2, 2], 0.01, 3, ('x','y','z',), [('1.585572', '1.080462', '0.577934'), ('1.581883', '1.080814', '0.583169')]),
+        (["x**2+y","y**2+x"], [1, 1, -1, -1], None, 10, ('x','y',), [('0.000000', '0.000000'), ('-1.000000', '-1.000000')])
+
+    ]
+)
+def test_multi_var_newton(functions: list[str], initial_guesses: list[float], tolerance: float, max_iterations: int, symbols, expected_approximations):
+    """Test the Newton_Raphson method on single variable real functions with multiple initial guesses"""
+    assert newton_raphson_multi(functions, initial_guesses, tolerance, max_iterations, symbols) == expected_approximations

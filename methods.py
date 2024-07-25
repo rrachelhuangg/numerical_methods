@@ -29,7 +29,7 @@ def newton_raphson(functions, initial_guesses, tolerance: float, max_iterations:
         root_approximations+=[float(f"{iter_estimate:.6f}")]
     return root_approximations
 
-def newton_raphson_multi(functions, initial_guesses, symbols, tolerance: float, max_iterations: int):
+def newton_raphson_multi(functions, initial_guesses, tolerance: float, max_iterations: int, symbols):
     """Implementation of the Newton-Raphson method for systems of 
     equations with multiple variables."""
     root_approximations = []

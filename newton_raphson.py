@@ -15,6 +15,7 @@ def main():
 @click.option(
     '--initial-guesses',
     multiple=True,
+    type=float,
     help='temp text'
 )
 @click.option(
@@ -40,15 +41,15 @@ def main():
 def iterate_newton(
     functions,
     initial_guesses,
-    symbols,
-    tolerance: float | None = None,
-    max_iterations: int | None = None
+    tolerance,
+    max_iterations,
+    symbols
 ):
     """Apply the Newton-Raphson method iteratively until desired accuracy is obtained."""
     if len(functions) == 1:
         print(newton_raphson(functions, initial_guesses, tolerance, max_iterations, symbols))
     elif len(functions) > 1:
-        print(newton_raphson_multi(functions, initial_guesses, symbols, tolerance, max_iterations))
+        print(newton_raphson_multi(functions, initial_guesses, tolerance, max_iterations, symbols))
 
 if __name__ == "__main__":
     main()
