@@ -3,7 +3,7 @@ import pytest
 from methods import newton_raphson, newton_raphson_multi
 
 @pytest.mark.parametrize(
-    "functions, initial_guesses, tolerance, max_iterations, symbols, expected_approximations",
+    "functions, initial_approximations, tolerance, max_iterations, symbols, expected_approximations",
     [
         (["x**3-4*x**2+1"], [0.5], None, 3, ('x',), [0.537402]),
         (["x**3-x"], [0.5, -0.5, 0.1], None, 5, ('x',), [-1.00000000000000, 1.00000000000000, 0]),
@@ -12,12 +12,12 @@ from methods import newton_raphson, newton_raphson_multi
         (["x**4-5*x**2+4"], [-1.5, 1.5, 0.5, -0.5], 0.1, 3, ('x',), [-7.286189, 7.286189, 0.999995, -0.999995])
     ]
 )
-def test_single_var_newton(functions: list[str], initial_guesses: list[float], tolerance: float, max_iterations: int, symbols, expected_approximations):
-    """Test the Newton_Raphson method on single variable real functions with a single initial guess"""
-    assert newton_raphson(functions, initial_guesses, tolerance, max_iterations, symbols) == expected_approximations
+def test_single_var_newton(functions: list[str], initial_approximations: list[float], tolerance: float, max_iterations: int, symbols, expected_approximations):
+    """Test the Newton_Raphson method on single variable real functions with a single initial approximation"""
+    assert newton_raphson(functions, initial_approximations, tolerance, max_iterations, symbols) == expected_approximations
 
 @pytest.mark.parametrize(
-    "functions, initial_guesses, tolerance, max_iterations, symbols, expected_approximations",
+    "functions, initial_approximations, tolerance, max_iterations, symbols, expected_approximations",
     [
         (["x+y**2","x-y**2"], [1, 1], None, 3, ('x','y',), [('0.000000', '0.125000')]),
         (["cos(x)-y","sin(y)+x-1"], [0, 1], None, 3, ('x','y',), [('0.166039', '0.986247')]),
@@ -29,6 +29,6 @@ def test_single_var_newton(functions: list[str], initial_guesses: list[float], t
 
     ]
 )
-def test_multi_var_newton(functions: list[str], initial_guesses: list[float], tolerance: float, max_iterations: int, symbols, expected_approximations):
-    """Test the Newton_Raphson method on single variable real functions with multiple initial guesses"""
-    assert newton_raphson_multi(functions, initial_guesses, tolerance, max_iterations, symbols) == expected_approximations
+def test_multi_var_newton(functions: list[str], initial_approximations: list[float], tolerance: float, max_iterations: int, symbols, expected_approximations):
+    """Test the Newton_Raphson method on single variable real functions with multiple initial approximations"""
+    assert newton_raphson_multi(functions, initial_approximations, tolerance, max_iterations, symbols) == expected_approximations

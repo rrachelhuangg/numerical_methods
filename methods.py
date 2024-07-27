@@ -2,11 +2,11 @@
 from sympy import *
 import numpy as np
 
-def newton_raphson(functions, initial_guesses, tolerance: float, max_iterations: int, symbols) -> list[float]:
+def newton_raphson(functions, initial_approximations, tolerance: float, max_iterations: int, symbols) -> list[float]:
     """Implementation of the Newton-Raphson method"""
     root_approximations = []
-    for guess in initial_guesses:
-        estimate = float(guess)
+    for approximation in initial_approximations:
+        estimate = float(approximation)
         iter_estimate, x, function = estimate, str(np.asarray(symbols)[0]), functions[0]
         if not max_iterations:
             if tolerance:
@@ -29,12 +29,12 @@ def newton_raphson(functions, initial_guesses, tolerance: float, max_iterations:
         root_approximations+=[float(f"{iter_estimate:.6f}")]
     return root_approximations
 
-def newton_raphson_multi(functions, initial_guesses, tolerance: float, max_iterations: int, symbols):
+def newton_raphson_multi(functions, initial_approximations, tolerance: float, max_iterations: int, symbols):
     """Implementation of the Newton-Raphson method for systems of 
     equations with multiple variables."""
     root_approximations = []
-    for i in range(0, len(initial_guesses), len(symbols)):
-        estimate, symbols = np.asarray(initial_guesses[i:i+len(symbols)]), np.asarray(symbols)
+    for i in range(0, len(initial_approximations), len(symbols)):
+        estimate, symbols = np.asarray(initial_approximations[i:i+len(symbols)]), np.asarray(symbols)
         iter_estimate = estimate
         F = [function for function in functions]
         F = Matrix([F])

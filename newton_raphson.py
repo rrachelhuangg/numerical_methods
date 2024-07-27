@@ -10,46 +10,46 @@ def main():
 @click.option(
     '--functions',
     multiple=True,
-    help='temp text'
+    help='Input functions.'
 )
 @click.option(
-    '--initial-guesses',
+    '--initial-approximations',
     multiple=True,
     type=float,
-    help='temp text'
+    help='Initial root approximations for the input functions.'
 )
 @click.option(
     '--tolerance',
     default=None,
     type=float,
-    help='If the absolute difference between the current approximation and the previous approximation' 
+    help='Optional: If the absolute difference between the current approximation and the previous approximation' 
     'is less than the tolerance, iteration will be stopped.'
 )
 @click.option(
     '--max-iterations',
     default=None,
     type=int,
-    help='The number of Newton-Raphson method iterations desired to approximate function roots.'
+    help='Optional: The number of Newton-Raphson method iterations desired to approximate function roots. Defaults to 10 if neither'
+    'a --tolerance argument or --max-iterations argument is provided.'
 )
 @click.option(
     '--symbols',
-    default = None,
     multiple=True,
-    help='temp text'
+    help='The symbols used in the system of equations provided.'
 )
 
 def iterate_newton(
     functions,
-    initial_guesses,
+    initial_approximations,
     tolerance,
     max_iterations,
     symbols
 ):
     """Apply the Newton-Raphson method iteratively until desired accuracy is obtained."""
     if len(functions) == 1:
-        print(newton_raphson(functions, initial_guesses, tolerance, max_iterations, symbols))
+        print(newton_raphson(functions, initial_approximations, tolerance, max_iterations, symbols))
     elif len(functions) > 1:
-        print(newton_raphson_multi(functions, initial_guesses, tolerance, max_iterations, symbols))
+        print(newton_raphson_multi(functions, initial_approximations, tolerance, max_iterations, symbols))
 
 if __name__ == "__main__":
     main()
