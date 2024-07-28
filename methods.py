@@ -12,18 +12,20 @@ def newton_raphson(functions, initial_approximations, tolerance: float, max_iter
             if tolerance:
                 while True:
                     iter_estimate = estimate - ((sympify(function).subs(x,estimate))/(sympify(diff(function),x).subs(x,estimate)))
-                    if abs(iter_estimate-estimate) < tolerance:
+                    if abs(iter_estimate-estimate) < tolerance or iter_estimate==estimate:
                         break
                     estimate = iter_estimate
             elif not tolerance:
                 max_iterations = 10
                 for i in range(max_iterations):
                     iter_estimate = estimate - ((sympify(function).subs(x,estimate))/(sympify(diff(function),x).subs(x,estimate)))
+                    if iter_estimate==estimate:
+                        break
                     estimate = iter_estimate
         if max_iterations:
             for i in range(max_iterations):
                 iter_estimate = estimate - ((sympify(function).subs(x,estimate))/(sympify(diff(function),x).subs(x,estimate)))
-                if tolerance is not None and abs(iter_estimate-estimate) < tolerance:
+                if tolerance is not None and abs(iter_estimate-estimate) < tolerance or iter_estimate==estimate:
                     break
                 estimate = iter_estimate
         root_approximations+=[float(f'{iter_estimate:.6f}')]
@@ -49,7 +51,7 @@ def newton_raphson_multi(functions, initial_approximations, tolerance: float, ma
                     iter_estimate, estimate = multi_newton_iteration(J, F, point, iter_estimate, estimate)
                     checks = [abs(estimate[i]-iter_estimate[i]) for i in range(len(estimate))]
                     for c in checks:
-                        if c > tolerance:
+                        if c > tolerance or iter_estimate==estimate:
                             stop=False
                     estimate = iter_estimate
             elif not tolerance:
@@ -59,6 +61,8 @@ def newton_raphson_multi(functions, initial_approximations, tolerance: float, ma
                     if len(multi_newton_iteration(J, F, point, iter_estimate, estimate))!=2:
                         return multi_newton_iteration(J, F, point, iter_estimate, estimate)
                     iter_estimate, estimate = multi_newton_iteration(J, F, point, iter_estimate, estimate)
+                    if iter_estimate==estimate:
+                        break
                     estimate = iter_estimate
         if max_iterations:
             for i in range(max_iterations):
@@ -72,7 +76,7 @@ def newton_raphson_multi(functions, initial_approximations, tolerance: float, ma
                     for c in checks:
                         if c > tolerance:
                             stop=False
-                    if stop==True:
+                    if stop==True or iter_estimate==estimate:
                         break
                 estimate = iter_estimate
         root_approximations+=[tuple([f'{val:.6f}' for val in estimate])]
