@@ -26,7 +26,7 @@ def newton_raphson(functions, initial_approximations, tolerance: float, max_iter
                 if tolerance is not None and abs(iter_estimate-estimate) < tolerance:
                     break
                 estimate = iter_estimate
-        root_approximations+=[float(f"{iter_estimate:.6f}")]
+        root_approximations+=[float(f'{iter_estimate:.6f}')]
     return root_approximations
 
 def newton_raphson_multi(functions, initial_approximations, tolerance: float, max_iterations: int, symbols):
@@ -44,7 +44,13 @@ def newton_raphson_multi(functions, initial_approximations, tolerance: float, ma
                 stop=False
                 while stop==False:
                     point = {sym:estimate[i] for (i, sym) in enumerate(symbols)}
-                    iter_estimate, estimate, stop = Matrix(list(estimate))-((J.subs(point).inv())*(F.subs(point)).T), Matrix(list(estimate)), True
+                    if len(multi_iteration(J, F, point, iter_estimate, estimate))!=2:
+                        return multi_iteration(J, F, point, iter_estimate, estimate)
+                    iter_estimate, estimate = multi_iteration(J, F, point, iter_estimate, estimate)
+                    # if J.subs(point).det()!=0:
+                    #     iter_estimate, estimate, stop = Matrix(list(estimate))-((J.subs(point).inv())*(F.subs(point)).T), Matrix(list(estimate)), True
+                    # else:
+                    #     return 'Jacobian matrix not invertible. Please try other initial approximations.'
                     checks = [abs(estimate[i]-iter_estimate[i]) for i in range(len(estimate))]
                     for c in checks:
                         if c > tolerance:
@@ -54,12 +60,16 @@ def newton_raphson_multi(functions, initial_approximations, tolerance: float, ma
                 max_iterations = 10
                 for i in range(max_iterations):
                     point = {sym:estimate[i] for (i, sym) in enumerate(symbols)}
-                    iter_estimate = Matrix(list(estimate))-((J.subs(point).inv())*(F.subs(point)).T)
+                    if len(multi_iteration(J, F, point, iter_estimate, estimate))!=2:
+                        return multi_iteration(J, F, point, iter_estimate, estimate)
+                    iter_estimate, estimate = multi_iteration(J, F, point, iter_estimate, estimate)
                     estimate = iter_estimate
         if max_iterations:
             for i in range(max_iterations):
                 point = {sym:estimate[i] for (i, sym) in enumerate(symbols)}
-                iter_estimate = Matrix(list(estimate))-((J.subs(point).inv())*(F.subs(point)).T)
+                if len(multi_iteration(J, F, point, iter_estimate, estimate))!=2:
+                    return multi_iteration(J, F, point, iter_estimate, estimate)
+                iter_estimate, estimate = multi_iteration(J, F, point, iter_estimate, estimate)
                 if tolerance is not None:
                     estimate, stop = Matrix(list(estimate)), True
                     checks = [abs(estimate[i]-iter_estimate[i]) for i in range(len(estimate))]
@@ -69,5 +79,11 @@ def newton_raphson_multi(functions, initial_approximations, tolerance: float, ma
                     if stop==True:
                         break
                 estimate = iter_estimate
-        root_approximations+=[tuple([f"{val:.6f}" for val in estimate])]
+        root_approximations+=[tuple([f'{val:.6f}' for val in estimate])]
     return root_approximations
+
+def multi_iteration(J, F, point, iter_estimate, estimate):
+    try:
+        return Matrix(list(estimate))-((J.subs(point).inv())*(F.subs(point)).T), Matrix(list(estimate))
+    except:
+        return 'Jacobian matrix not invertible. Please try other initial approximations.'

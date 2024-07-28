@@ -51,5 +51,5 @@ def iterate_newton(
     elif len(functions) > 1:
         print(newton_raphson_multi(functions, initial_approximations, tolerance, max_iterations, symbols))
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
