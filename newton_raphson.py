@@ -1,4 +1,4 @@
-"""CLI to support the Newton-raphson method for single and multivariable real functions"""
+"""CLI to support the Newton-Raphson method for single and multivariable real functions"""
 import click
 from methods import newton_raphson, newton_raphson_multi
 

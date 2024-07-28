@@ -44,13 +44,9 @@ def newton_raphson_multi(functions, initial_approximations, tolerance: float, ma
                 stop=False
                 while stop==False:
                     point = {sym:estimate[i] for (i, sym) in enumerate(symbols)}
-                    if len(multi_iteration(J, F, point, iter_estimate, estimate))!=2:
-                        return multi_iteration(J, F, point, iter_estimate, estimate)
-                    iter_estimate, estimate = multi_iteration(J, F, point, iter_estimate, estimate)
-                    # if J.subs(point).det()!=0:
-                    #     iter_estimate, estimate, stop = Matrix(list(estimate))-((J.subs(point).inv())*(F.subs(point)).T), Matrix(list(estimate)), True
-                    # else:
-                    #     return 'Jacobian matrix not invertible. Please try other initial approximations.'
+                    if len(multi_newton_iteration(J, F, point, iter_estimate, estimate))!=2:
+                        return multi_newton_iteration(J, F, point, iter_estimate, estimate)
+                    iter_estimate, estimate = multi_newton_iteration(J, F, point, iter_estimate, estimate)
                     checks = [abs(estimate[i]-iter_estimate[i]) for i in range(len(estimate))]
                     for c in checks:
                         if c > tolerance:
@@ -60,16 +56,16 @@ def newton_raphson_multi(functions, initial_approximations, tolerance: float, ma
                 max_iterations = 10
                 for i in range(max_iterations):
                     point = {sym:estimate[i] for (i, sym) in enumerate(symbols)}
-                    if len(multi_iteration(J, F, point, iter_estimate, estimate))!=2:
-                        return multi_iteration(J, F, point, iter_estimate, estimate)
-                    iter_estimate, estimate = multi_iteration(J, F, point, iter_estimate, estimate)
+                    if len(multi_newton_iteration(J, F, point, iter_estimate, estimate))!=2:
+                        return multi_newton_iteration(J, F, point, iter_estimate, estimate)
+                    iter_estimate, estimate = multi_newton_iteration(J, F, point, iter_estimate, estimate)
                     estimate = iter_estimate
         if max_iterations:
             for i in range(max_iterations):
                 point = {sym:estimate[i] for (i, sym) in enumerate(symbols)}
-                if len(multi_iteration(J, F, point, iter_estimate, estimate))!=2:
-                    return multi_iteration(J, F, point, iter_estimate, estimate)
-                iter_estimate, estimate = multi_iteration(J, F, point, iter_estimate, estimate)
+                if len(multi_newton_iteration(J, F, point, iter_estimate, estimate))!=2:
+                    return multi_newton_iteration(J, F, point, iter_estimate, estimate)
+                iter_estimate, estimate = multi_newton_iteration(J, F, point, iter_estimate, estimate)
                 if tolerance is not None:
                     estimate, stop = Matrix(list(estimate)), True
                     checks = [abs(estimate[i]-iter_estimate[i]) for i in range(len(estimate))]
@@ -82,8 +78,28 @@ def newton_raphson_multi(functions, initial_approximations, tolerance: float, ma
         root_approximations+=[tuple([f'{val:.6f}' for val in estimate])]
     return root_approximations
 
-def multi_iteration(J, F, point, iter_estimate, estimate):
+def multi_newton_iteration(J, F, point, iter_estimate, estimate):
+    """Perform the matrix calculations necessary for the multivariable Newton-Raphson method"""
     try:
         return Matrix(list(estimate))-((J.subs(point).inv())*(F.subs(point)).T), Matrix(list(estimate))
     except:
         return 'Jacobian matrix not invertible. Please try other initial approximations.'
+
+def simple_simpsons(function: str, interval_start: float, interval_end: float, n_subintervals: int) -> float:
+    "Implementation of Simpson's rule over a single interval."
+    delta_x , coefficients, i, n_coefficients, x_values, x, approximation = (interval_end-interval_start)/n_subintervals, [], interval_start, n_subintervals+1, [], 'x', 0
+    while i <= interval_end:
+        if i == interval_start or len(coefficients)==n_coefficients-1:
+            coefficients += [1]
+        elif len(coefficients)%2==1:
+            coefficients += [4]
+        elif len(coefficients)%2 == 0:
+            coefficients += [2]
+        x_values += [i]
+        i += delta_x
+    approximation = sum(sympify(function).subs(x, val)*coefficients[i] for i, val in enumerate(x_values)) * delta_x/3
+    return float(f'{approximation:.6f}')
+
+def composite_simpsons():
+    "Implementation of Simpson's rule over multiple intervals."
+    pass
