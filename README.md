@@ -1,4 +1,4 @@
-## Implementing the Newton-Raphson method, Simpson's Rule, and the Runge-Kutta method
+## Implementing the Newton-Raphson method and Simpson's Rule
 
 ### Description
 
