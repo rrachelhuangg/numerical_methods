@@ -39,6 +39,6 @@ is difficult to solve.
 
 ### Testing the Simpsons Rule implementation
 - Example Click commands for testing through the command line:
-  - `python simpsons.py integrate-simpsons --function '4**x' --interval-start 0 --interval-end 100 --n-subintervals 10 --toggle True`
-  - `python simpsons.py integrate-simpsons --function 'sin(x)' --interval-start 0 --interval-end 100 --n-subintervals 10 --simpsons-type False --toggle True`
-  - `python simpsons.py integrate-simpsons --function 'sin(x)' --interval-start 0 --interval-end 3.14159 --n-subintervals 4 --calculate-error True --toggle True`
+  - `python simpsons.py integrate-simpsons --function '4**x' --interval-start 0 --interval-end 100 --n-subintervals 10`
+  - `python simpsons.py integrate-simpsons --function 'sin(x)' --interval-start 0 --interval-end 100 --n-subintervals 10 --simpsons-type False`
+  - `python simpsons.py integrate-simpsons --function 'sin(x)' --interval-start 0 --interval-end 3.14159 --n-subintervals 4 --simpsons-type False --calculate-error True`

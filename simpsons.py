@@ -37,13 +37,7 @@ def main():
     '--calculate-error',
     default=False,
     type=bool,
-    help='Optional: Will calculate the error bound for Simpson\'s rule is True is provided. Defaults to False otherwise.'
-)
-@click.option(
-    '--toggle',
-    default=True,
-    type=bool,
-    help='temp text'
+    help='Optional: Will calculate the error bound for Simpson\'s rule is True is provided. Defaults to False if not provided.'
 )
 
 def integrate_simpsons(
@@ -52,14 +46,13 @@ def integrate_simpsons(
     interval_end,
     n_subintervals: int,
     simpsons_type: bool,
-    calculate_error: bool,
-    toggle: bool
+    calculate_error: bool
 ):
     """Apply the appropriate version of Simpson's rule for approximating the integral of the input function"""
     if simpsons_type:
-        print(simple_simpsons(function, interval_start, interval_end, n_subintervals, calculate_error, toggle))
+        print(simple_simpsons(function, interval_start, interval_end, n_subintervals, calculate_error))
     else:
-        print(composite_simpsons(function, interval_start, interval_end, n_subintervals, calculate_error, toggle))
+        print(composite_simpsons(function, interval_start, interval_end, n_subintervals, calculate_error))
 
 if __name__ == '__main__':
     main()

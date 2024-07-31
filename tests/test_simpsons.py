@@ -11,7 +11,8 @@ from methods import simple_simpsons, composite_simpsons, simpsons_error
         ('cos(1+sqrt(x))',0, 4, 8, False, False, 'Approximation:  -2.471601'),
         ('(1)/(1+x**2)', 0, 1, 4, False, False, 'Approximation:  0.785392'),
         ('1/x', 1, 2, 2, False, False, 'Approximation:  0.694444'),
-        ('x**2', 0, 4, 4, False, False, 'Approximation:  21.333333')
+        ('x**2', 0, 4, 4, False, False, 'Approximation:  21.333333'),
+        ('sin(x)', 0, 3.14159, 4, True, False, 'Approximation:  2.00456  Calculated Error for this approximation:  0.006641')
     ]
 )
 def test_simple_simpsons(function, interval_start, interval_end, n_subintervals, calculate_error, toggle, expected_approximation):
@@ -19,19 +20,20 @@ def test_simple_simpsons(function, interval_start, interval_end, n_subintervals,
     assert simple_simpsons(function, interval_start, interval_end, n_subintervals, calculate_error, toggle) == expected_approximation
 
 @pytest.mark.parametrize(
-    'function, interval_start, interval_end, n_subintervals, calculate_error, toggle, expected_approximation',
+    'function, interval_start, interval_end, n_subintervals, calculate_error, expected_approximation',
     [
-        ('x**2', 0, 4, 4, False, True, 'Approximation:  21.333332'),
-        ('x**3', 2, 10, 4, False, True, 'Approximation:  2496.0'),
-        ('sin(x)-cos(x)', 0, 100, 10, False, True, 'Approximation:  0.648101'),
-        ('(1)/(1+x**2)', 0, 10, 10, False, True, 'Approximation:  1.459168'),
-        ('sin(x)', 0, 100, 10, False, True, 'Approximation:  0.138548'),
-        ('4**x', 0, 100, 10, False, True, 'Approximation:  1.1784212324565931e+60')
+        ('x**2', 0, 4, 4, False, 'Approximation:  21.333332'),
+        ('x**3', 2, 10, 4, False, 'Approximation:  2496.0'),
+        ('sin(x)-cos(x)', 0, 100, 10, False, 'Approximation:  0.648101'),
+        ('(1)/(1+x**2)', 0, 10, 10, False, 'Approximation:  1.459168'),
+        ('sin(x)', 0, 100, 10, False, 'Approximation:  0.138548'),
+        ('4**x', 0, 100, 10, False, 'Approximation:  1.1784212324565931e+60'),
+        ('sin(x)', 0, 3.14159, 4, True, 'Approximation:  1.888286  Calculated Error for this approximation:  0.006641')
     ]
 )
-def test_composite_simpsons(function, interval_start, interval_end, n_subintervals, calculate_error, toggle, expected_approximation):
+def test_composite_simpsons(function, interval_start, interval_end, n_subintervals, calculate_error, expected_approximation):
     """Test Simpson's rule over a single interval."""
-    assert composite_simpsons(function, interval_start, interval_end, n_subintervals, calculate_error, toggle) == expected_approximation
+    assert composite_simpsons(function, interval_start, interval_end, n_subintervals, calculate_error) == expected_approximation
 
 @pytest.mark.parametrize(
     'function, interval_start, interval_end, n_subintervals, expected_error_bound',
