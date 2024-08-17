@@ -15,7 +15,7 @@ The Newton-Raphson method is an iterative method that takes an initial approxima
 
 For single variable functions: $x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}$ where $x_{n+1}$ is the next iteration of the approximation for a given root x.
 
-For multivariable functions: $x_{n+1} = x_n - [J(x_n)]^-1*F(x_n)$ where F is the vector-valued function, x is the vector of variables, J is the Jacobian matrix of F, and n is the iteration number. 
+For multivariable functions: $x_{n+1} = x_n - [J(x_n)]^{-1}*F(x_n)$ where F is the vector-valued function, x is the vector of variables, J is the Jacobian matrix of F, and n is the iteration number. 
 
 ### Testing the Newton-Raphson method implementation
 - Example Click commands for testing through the command line (the order of Click arguments does not matter):
